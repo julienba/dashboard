@@ -1,0 +1,48 @@
+@()(content: Html)
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Dashboard</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">        
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/underscore-min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/backbone-min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/mustache-tmpl.js")" type="text/javascript" charset="utf-8"></script>
+        <script src="@routes.Assets.at("javascripts/mustache-0.7.0.min.js")" type="text/javascript" charset="utf-8"></script>        
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
+        <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
+
+    </head>
+    <body>
+		<div class="navbar">
+		    <div class="navbar-inner">
+		        <a class="brand" href="#">Dashboard</a>
+		        <ul class="nav">
+		            <li class="active"><a href="#">Home</a></li>
+		            <li><a href="#" id="show-modal">Create tab</a></li>
+		            <li><a href="#" id="show-import-feeds">Import feeds</a></li>
+		            <li><a href="@routes.Application.logout">Logout</a></li>    
+		        </ul>
+		    </div>
+		</div>   
+
+        <section id="app">
+	          <section id="main">
+                <div class="tabbable">
+                    <a href="#" id="show-new-module">new module</a>
+                    <ul id="tabs-list" class="nav nav-tabs"></ul>
+                </div>
+	              <section id="modules"></section>
+	          </section>
+        </section>
+        
+        @content
+        <div id="modal"/>
+        
+    </body>
+</html>

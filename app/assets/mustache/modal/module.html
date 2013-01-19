@@ -1,0 +1,22 @@
+<div class="modal">
+    <div class="modal-header"><h3>CONFIG MODULE {{id}} - {{title}} - {{url}}</h3></div>
+    <div class="modal-body">
+        <form class="action" method="POST">
+            <fieldset>
+                <label>Title</label>
+                <input type="text" id="title" name="title" value="{{title}}">
+                <label>URI</label>
+                <input type="text" id="websiteUrl" name="websiteUrl" value="{{websiteUrl}}">                
+                <label>RSS URI</label>
+                <input type="text" id="url" name="url" value="{{url}}">     
+                <label>Type</label>
+                <input type="text" id="type" name="type" value="{{type}}">     
+
+                <input type="hidden" name="id" value="{{id}}">           
+                <button type="submit" class="btn">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer"><a class="btn close">Close</a></div>
+</div>
+<div class="modal-backdrop"></div>

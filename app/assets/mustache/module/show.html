@@ -1,0 +1,21 @@
+<div class="module module_{{status}}">
+    <div class='header'>
+		    <a href="{{websiteUrl}}">{{{title}}}</a>
+        <div class="action" data-module-id="{{id}}">
+            <i class="icon-refresh"></i>
+            <i class="icon-pencil"></i>
+            <i class="icon-remove"></i>
+        </div>        
+    </div>
+    <ul class="feeds">
+        {{#feeds}}
+            <li>
+                <a {{#read}} class="read"{{/read}} data-feed-id="{{id}}" href="{{url}}">{{{title}}}</a><span class="date">{{date}}</span>
+            </li>
+		{{/feeds}}
+		     
+		{{^feeds}}
+		    No feeds...
+		{{/feeds}}
+    </ul>       
+</div>

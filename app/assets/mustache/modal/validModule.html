@@ -1,0 +1,25 @@
+<div class="modal">
+    <div class="modal-header"><h3>Choice RSS URL</h3></div>
+    <div class="modal-body">
+        {{#urls}}
+            <form class="action" method="POST">
+                <fieldset>
+                	<label>Title</label>
+                    <input id="title" name="title" value="{{{title}}}">                
+                	<label>Website URL</label>
+                    <input id="websiteUrl" name="websiteUrl" value="{{websiteUrl}}">
+                    <label>URL</label>
+                    <input id="url" name="url" value="{{url}}">
+                    <label>Type</label>
+                    <input id="type" name="type" value="{{type}}">
+                    <button type="submit" class="btn">Submit</button>
+                </fieldset>
+            </form>
+        {{/urls}}
+        {{^urls}}
+            No URLs found
+        {{/urls}}
+    </div>
+    <div class="modal-footer"><a class="btn close">Close</a></div>
+</div>
+<div class="modal-backdrop"></div>

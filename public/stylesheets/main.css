@@ -1,0 +1,69 @@
+body {
+	padding: 10px
+}
+
+.module{
+  height: 300px;
+  width: 450px;
+  float: left;
+  margin: 10px;
+  padding: 10px;
+  position: relative;
+  border-radius: 5px;
+  background: #F7F7F9;
+}
+
+.module .header{
+  border-bottom: 1px solid;
+  color: black;
+}
+
+.module .error{
+  background-color: red;
+}
+
+.module .empty{
+  background-color: yellow;
+}
+
+.module .header .action{
+  float: right;
+}
+
+li.module-header{
+  border: 1px solid;
+  padding: 2px;
+}
+
+/*#tabs-list {
+	position: relative;
+	list-style-type: none;
+	height: 30px;
+}
+
+#tabs-list li {
+	display: block;
+  float: left;
+  padding: 5px;
+}*/
+
+.feeds {
+	list-style-type: none;
+}
+.feeds a.read {
+	color: #999
+}
+
+span.date {
+	color: #AAA;
+	font-size: smaller;
+	padding-left: 3px;
+}
+
+div.module_ERROR {
+  background-color: red;	
+}
+
+.module .header a {
+	color: black;
+}

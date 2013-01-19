@@ -1,0 +1,14 @@
+<div class="modal">
+    <div class="modal-header"><h3>Import feeds</h3></div>
+    <div class="modal-body">
+        <form class="action" method="POST" enctype="multipart/form-data" action = "/importer/netvibes/{{username}}">
+            <fieldset>
+                <label>File</label>
+                <input type="file" id="file" name="file" placeholder="File...">
+                <button type="submit" class="btn">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer"><a class="btn close">Close</a></div>
+</div>
+<div class="modal-backdrop"></div>

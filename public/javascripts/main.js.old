@@ -1,0 +1,124 @@
+(function() {
+  //console.log(jsRoutes.controllers.Dashboard.testAjax());
+
+  /*$("#test").click(function(){
+    jsRoutes.controllers.Dashboard.testAjax().ajax({
+      success: function(data){
+        console.log("finnaly !")
+      }
+    });
+  });
+
+  Module = Backbone.Model.extend({
+    defaults: {
+      title: 'Untitled',
+      feeds: []
+    },
+    initialize: function(){
+      console.log("Welcome to this world");
+      this.bind("change:title", function(){
+        var title = this.get("title");
+        console.log("Changed my tile to " + title);
+      });
+    },
+    replaceTitleAttr: function(title){
+      this.set({ title: title});
+    }
+
+  });*/
+    
+  /*var module = new Module({title: "Feed 1"});
+  console.log("module: " + module.get("title"));
+  module.replaceTitleAttr("bla");
+  console.log("module: " + module.get("title"));
+
+  var attr = module.toJSON();
+  console.log(attr);
+
+  SearchView = Backbone.View.extend({
+    initialize: function(){
+      console.log("Alerts suck.");
+      this.render();
+    },
+    render: function(){
+      var template = _.template( $("#search_template").html(), {} );
+      // Load the compiled HTML into the Backbone "el"
+      this.$el.html( "coucou");
+    }
+  });
+ 
+  var search_view = new SearchView({ el: $("#search_container") });
+  */
+
+  //---------------------------------------------------------------------------
+  // ~ MODEL
+  //---------------------------------------------------------------------------
+
+  Page = Backbone.Model.extend({
+    default: {
+      title: 'untitle',
+      modules: []
+    },
+    initialize: function(){
+    }
+  }); 
+
+  Module = Backbone.Model.extend({
+    default: {
+      title: 'untitle',
+      feeds: []
+    },
+    initialize: function(){
+    }
+  }); 
+ 
+
+  //---------------------------------------------------------------------------
+  // ~ VIEW
+  //---------------------------------------------------------------------------
+
+  MenuView = Backbone.View.extend({
+    initialize: function(){
+      this.id = this.$el.attr("data-tab-id");
+      console.log("TODO: menu " + this.id);
+    }
+  }) 
+
+  NavView = Backbone.View.extend({
+    initialize: function(){
+      this.$el.children("li").each(function(i, tab){
+        new MenuView({el: tab});
+      });
+
+      /*
+      $("#newGroup").click(this.addGroup);
+      return this.el.children("li").each(function(i, group) {
+        new Group({
+          el: $(group)
+        });
+        return $("li", group).each(function(i, project) {
+          return new Project({
+            el: $(project)
+          });
+        });
+      });*/
+    },
+    
+    addTab: function(){
+      jsRoutes.controllers.Dashboard.saveTab().ajax({
+        success: function(data){
+          console.log(data);
+          var _view;
+          _view = MenuView({
+            el: $(data).appendTo("#tabs")  
+          });
+        }
+      });
+    }
+  });
+  
+  var nav_view = new NavView({ el: $("#tabs") });
+  
+
+
+}).call(this); 

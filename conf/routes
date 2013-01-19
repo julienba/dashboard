@@ -1,0 +1,37 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Test
+
+# Home page
+GET     /                             controllers.Application.index
+
+# Authenticate
+GET     /login                        controllers.Application.login
+POST    /login                        controllers.Application.authenticate
+GET     /logout                       controllers.Application.logout   
+
+# Tabs
+POST    /json/tab/:username/save        controllers.Tabs.save(username: String)
+GET     /json/tab/:username           	controllers.Tabs.json(username: String)
+
+# Modules
+GET       /json/modules/:tabId             controllers.Modules.json(tabId: Long)
+GET       /json/modules/fetch/:id          controllers.Modules.fetch(id: Long)
+POST      /json/modules/saveJS             controllers.Modules.saveJS()
+POST      /json/modules/:tabId/findRSS     controllers.Modules.findRSS(tabId: Long)
+POST      /json/modules/:tabId/create      controllers.Modules.create(tabId: Long)
+DELETE	  /json/modules/:tabId/:id		   controllers.Modules.delete(tabId: Long, id: Long)	
+
+# Feeds 
+GET		  /json/feeds/:id/read				controllers.Feeds.read(id: Long)
+
+# Importer
+POST      /importer/netvibes/:username            controllers.Importer.netvibes(username: String)
+
+# Javascript routing
+GET     /assets/javascripts/routes          controllers.Application.javascriptRoutes
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
