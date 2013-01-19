@@ -60,7 +60,6 @@ object Modules extends Controller with Secured {
       errors => BadRequest,
       rss => {
         val module = Module.save(tabId, rss)
-        println("TEST: " + module)
         Ok
       }
     )

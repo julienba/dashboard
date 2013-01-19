@@ -11,6 +11,7 @@ class AppRouter extends Backbone.Router
 
     routes:
         ''           : 'index'
+        'modal'      : 'dummy'
         'tab-:id'    : 'tabs'
 
     index: ->
@@ -24,6 +25,9 @@ class AppRouter extends Backbone.Router
         log "route tab: #{id}"
         if tabs.views[id]
             tabs.views[id].display2(id)
+
+    dummy: ->
+        log 'do nothing'
     
 # ---------------------------------------- MODEL
 class Tab extends Backbone.Model
@@ -237,6 +241,7 @@ $ ->
         view.show()
 
     $('#show-new-module').click (e) ->
+        e.preventDefault
         action = (data)->
             jsRoutes.controllers.Modules.findRSS(document.tabId).ajax
                 context: @
