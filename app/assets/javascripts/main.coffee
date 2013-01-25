@@ -17,9 +17,13 @@ class AppRouter extends Backbone.Router
     index: ->
         log 'route index'
         # move to first Tab
-        if tabs.models.length > 0
-            tabId = tabs.models[0].id
-            tabs.views[tabId].display2(tabId)
+        lastTabId = localStorage.getItem("tabId")
+        if lastTabId?
+            tabs.views[lastTabId].display2(lastTabId)
+        else
+            if tabs.models.length > 0
+                tabId = tabs.models[0].id
+                tabs.views[tabId].display2(tabId)
 
     tabs: (id) ->
         log "route tab: #{id}"
@@ -174,6 +178,7 @@ class TabView extends Backbone.View
     
     _display: (id) ->
         document.tabId = id
+        localStorage.setItem("tabId", id)
         module = new ModuleList([], {tabId: id})
         module.fetch()
         
