@@ -10,6 +10,7 @@ import rss.{RSSURL, HTMLFetcher, RSSFetcher}
 import crawler.Crawler
 import models.{Module, Feed}
 import json.Converter._
+import form.CommonForm.reorderForm
 
 case class Website(url: Option[String], rss: Option[String])
 
@@ -103,6 +104,19 @@ object Modules extends Controller with Secured {
   def delete(tabId: Long, id: Long) = IsOwnerOf(tabId) { user => implicit request =>
     Module.delete(id)
     Ok
+  }
+  
+  def savePosition(tabId: Long) = IsOwnerOf(tabId) { user => implicit request =>
+    reorderForm.bindFromRequest.fold(
+      errors => BadRequest,
+      {
+        case(ids) => {
+          
+          Module.savePosition(ids)
+          Ok
+        }
+  	  }
+    )
   }
   
 }

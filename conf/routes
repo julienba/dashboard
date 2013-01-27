@@ -13,8 +13,9 @@ POST    /login                        controllers.Application.authenticate
 GET     /logout                       controllers.Application.logout   
 
 # Tabs
-POST    /json/tab/:username/save        controllers.Tabs.save(username: String)
-GET     /json/tab/:username           	controllers.Tabs.json(username: String)
+POST    /json/tab/:username/save        controllers.Tabs.save(username)
+GET     /json/tab/:username           	controllers.Tabs.json(username)
+POST 	/tab/:username/savePosition		controllers.Tabs.savePosition(username)
 
 # Modules
 GET       /json/modules/:tabId             controllers.Modules.json(tabId: Long)
@@ -22,7 +23,8 @@ GET       /json/modules/fetch/:id          controllers.Modules.fetch(id: Long)
 POST      /json/modules/saveJS             controllers.Modules.saveJS()
 POST      /json/modules/:tabId/findRSS     controllers.Modules.findRSS(tabId: Long)
 POST      /json/modules/:tabId/create      controllers.Modules.create(tabId: Long)
-DELETE	  /json/modules/:tabId/:id		   controllers.Modules.delete(tabId: Long, id: Long)	
+DELETE	  /json/modules/:tabId/:id		   controllers.Modules.delete(tabId: Long, id: Long)
+POST 	  /modules/:tabId/savePosition  controllers.Modules.savePosition(tabId: Long)	
 
 # Feeds 
 GET		  /json/feeds/:id/read				controllers.Feeds.read(id: Long)

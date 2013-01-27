@@ -50,12 +50,14 @@ object Application extends Controller with Secured {
       Routes.javascriptRouter("jsRoutes")(
         Tabs.json,
         Tabs.save,
+        Tabs.savePosition,
         Modules.fetch,
         Modules.saveJS,
         Modules.json,
         Modules.findRSS,
         Modules.create,
         Modules.delete,
+        Modules.savePosition,
         Feeds.read
       )
     ).as("text/javascript")

@@ -16,7 +16,9 @@ case class Tab(
   )
   
 object Tab {
-  
+  /**
+   * PARSER
+   */
   val simple = {
     get[Pk[Long]]("tab.id") ~
     get[String]("tab.title") ~   
@@ -25,10 +27,22 @@ object Tab {
       case id~title~position~user => Tab(id, title, position, user)
     } 
   }  
+
+  /**
+   * CHAIN QUERY
+   */  
+  def select(id: Long)(implicit connection: java.sql.Connection): Option[Tab] = {
+    SQL("SELECT * FROM tab WHERE id = {id}")
+      .on('id -> id)
+      .as(Tab.simple.singleOpt)    
+  }
   
+  /**
+   * QUERY
+   */  
   def findAll(user: String) = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT * FROM tab WHERE users = {user}")
+      SQL("SELECT * FROM tab WHERE users = {user} ORDER BY position")
       	.on('user -> user)
       	.as(Tab.simple *)
     }    
@@ -36,10 +50,7 @@ object Tab {
   
   def find(id: Long): (Option[Tab], List[Module]) = {
     DB.withConnection { implicit connection =>
-      val tab = SQL("SELECT * FROM tab WHERE id = {id}")
-        			.on('id -> id)
-        			.as(Tab.simple.singleOpt)
-        	
+      val tab = select(id)
       val modules = tab.map( t => Module.selectAll(id)).getOrElse(Nil)
       (tab, modules)
     }
@@ -60,9 +71,19 @@ object Tab {
     }
   }
 
+  def savePosition(username: String, positions: List[Int]) {
+    DB.withConnection { implicit connection =>
+      for( (id, index) <- positions.zipWithIndex){
+        SQL("UPDATE tab SET position={position} WHERE id={id} AND users={user}")
+          .on('position -> index, 'id -> id, 'user -> username)
+          .executeUpdate()
+      }
+    }
+  }
+  
   def isOwner(tabId: Long, username: String): Boolean = {
     DB.withConnection { implicit connection =>
-      SQL("select count(id) = 1 FROM tab where id = {id} AND users = {user}")
+      SQL("SELECT COUNT(id) = 1 FROM tab WHERE id = {id} AND users = {user}")
         .on('id -> tabId, 'user -> username)
         .as(scalar[Boolean].single)
     }

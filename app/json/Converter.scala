@@ -29,6 +29,7 @@ object Converter {
 	    "url" -> JsString(o.url),
 	    "status" -> JsString(o.status),
         "type" -> JsString(o.typeStr),
+        "position" -> JsNumber(o.position),
 	    "feeds" -> JsArray(o.feeds.map(FeedFormat.writes(_)))
 	  ))
   }

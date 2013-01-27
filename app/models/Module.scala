@@ -28,6 +28,7 @@ case class Module(
     status: String,
     lastUpdate: Date,
     typeStr: String,
+    position: Int,
     feeds: List[Feed] = Nil
   )
   
@@ -41,8 +42,9 @@ object Module extends AnormExtension {
     get[String]("module.url") ~
     get[String]("module.status") ~
     get[Date]("module.lastUpdate") ~
-    get[String]("module.type") map {   
-      case id~tabId~title~websiteUrl~url~status~lastUpdate~typeStr => Module(id, tabId, title, websiteUrl, url, status, lastUpdate, typeStr)
+    get[String]("module.type") ~
+    get[Int]("module.position") map {   
+      case id~tabId~title~websiteUrl~url~status~lastUpdate~typeStr~position => Module(id, tabId, title, websiteUrl, url, status, lastUpdate, typeStr, position)
     } 
   }
   
@@ -64,12 +66,13 @@ object Module extends AnormExtension {
       val id = SQL("SELECT nextval('module_id_seq')").as(scalar[Long].single) 
       
       val lastUpdate = new Date
+      val position = -1
       
-      SQL("INSERT INTO module VALUES({id}, {tabId}, {title}, {websiteUrl}, {url}, {status}, {lastUpdate}, {type})")
-      	.on('id -> id, 'tabId -> tabId, 'title -> rssURL.title, 'websiteUrl -> rssURL.websiteUrl, 'url -> rssURL.url, 'type -> rssURL.typeStr, 'status -> "OK", 'lastUpdate -> lastUpdate)
+      SQL("INSERT INTO module VALUES({id}, {tabId}, {title}, {websiteUrl}, {url}, {status}, {lastUpdate}, {type}, {position})")
+      	.on('id -> id, 'tabId -> tabId, 'title -> rssURL.title, 'websiteUrl -> rssURL.websiteUrl, 'url -> rssURL.url, 'type -> rssURL.typeStr, 'status -> "OK", 'lastUpdate -> lastUpdate, 'position -> position)
       	.executeUpdate()
       	
-      Module(Id(id), tabId, rssURL.title, rssURL.websiteUrl, rssURL.url, "OK", lastUpdate, rssURL.typeStr)	
+      Module(Id(id), tabId, rssURL.title, rssURL.websiteUrl, rssURL.url, "OK", lastUpdate, rssURL.typeStr, position)	
     }    
   }
   
@@ -98,7 +101,7 @@ object Module extends AnormExtension {
   
   def findAll(tabId: Long): List[Module] = {
     DB.withConnection { implicit connection =>
-      SQL("SELECT * FROM module WHERE tabId = {tabId}")
+      SQL("SELECT * FROM module WHERE tabId = {tabId} ORDER BY position")
       	.on('tabId -> tabId)
       	.as(Module.simple *)
     }
@@ -136,4 +139,13 @@ object Module extends AnormExtension {
     }
   }
   
+  def savePosition(positions: List[Int]) {
+    DB.withConnection { implicit connection =>
+      for( (id, index) <- positions.zipWithIndex){
+        SQL("UPDATE module SET position={position} WHERE id={id}")
+          .on('position -> index, 'id -> id)
+          .executeUpdate()
+      }
+    }
+  }  
 }

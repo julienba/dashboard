@@ -73,6 +73,7 @@ class TabList extends Backbone.Collection
     render: ->
         log 'render TabList'
 
+
 class ModuleList extends Backbone.Collection
     model: Module
     
@@ -103,6 +104,13 @@ class ModuleView extends Backbone.View
         'click .module .action .icon-remove'  : 'delete'
         'click .feeds a'                      : 'markAsRead'
         'mousedown .feeds a'                  : 'markAsRead' # Tricks for middle click...
+        'dragstart'                           : 'dragStart'
+        'dragend'                             : 'dragEnd'
+        'dragenter'                           : 'dragEnter'
+        'dragover'                            : 'dragOver'
+        'dragleave'                           : 'dragLeave'
+        'drop'                                : 'drop'
+
 
     render: ->
         @$el.html Mustache.render(@template, @.model.toJSON())
@@ -150,6 +158,57 @@ class ModuleView extends Backbone.View
                     log 'success'
             @.remove()
 
+    dragStart: (e) ->
+        window.srcDad = e.currentTarget
+        e.originalEvent.dataTransfer.setData('text/html', e.currentTarget.innerHTML)
+        e.currentTarget.style.opacity = '0.4'
+
+    dragEnd: (e) ->
+        e.currentTarget.style.opacity = '1'
+
+    dragOver: (e) ->
+        if (e.preventDefault)
+            e.preventDefault() # Necessary. Allows us to drop.
+        e.originalEvent.dataTransfer.dropEffect = 'move' # See the section on the DataTransfer object.
+        false
+
+    dragEnter: (e) ->
+        #this / e.target is the current hover target.
+        e.currentTarget.classList.add('over')
+
+    dragLeave: (e) ->
+        e.currentTarget.classList.remove('over')  # this / e.target is previous target element.
+
+    drop: (e) ->
+        if (e.stopPropagation)
+            e.stopPropagation()
+
+        # Don't do anything if dropping the same column we're dragging.
+        if (window.currentTarget != window.srcDad)
+            window.srcDad.innerHTML = e.currentTarget.innerHTML
+            e.currentTarget.innerHTML = e.originalEvent.dataTransfer.getData('text/html')
+
+        e.currentTarget.style.opacity = '1'
+        window.srcDad.style.opacity = '1'
+
+        # convert dataset to JS Object
+        ids = ( $(module)[0].dataset['moduleId'] for module in $('#modules div div.module') )
+        idsNumber = ( parseInt(id) for id in ids)
+        data = {}
+        for i in [0..idsNumber.length - 1]
+            key = 'ids[' + i + ']'
+            value = idsNumber[i]
+            data[key] = value
+
+        jsRoutes.controllers.Modules.savePosition(document.tabId, document.username).ajax
+            context: @
+            data: data
+            error: (err) ->
+                log 'ERROR'
+                log err
+
+        false
+
 
 class TabView extends Backbone.View
 
@@ -158,7 +217,66 @@ class TabView extends Backbone.View
     tagName: "li"
 
     events:
-      'click': 'display',
+        'click'     : 'display'
+        'dragstart' : 'dragStart'
+        'dragend'   : 'dragEnd'
+        'dragenter' : 'dragEnter'
+        'dragover'  : 'dragOver'
+        'dragleave' : 'dragLeave'
+        'drop'      : 'drop'
+        
+    dragStart: (e) ->
+        window.srcDad = e.currentTarget
+        e.originalEvent.dataTransfer.setData('text/html', e.currentTarget.innerHTML)
+        e.currentTarget.style.opacity = '0.4'
+
+    dragEnd: (e) ->
+        e.currentTarget.style.opacity = '1'
+
+    dragOver: (e) ->
+        if (e.preventDefault)
+            e.preventDefault() # Necessary. Allows us to drop.
+        e.originalEvent.dataTransfer.dropEffect = 'move' # See the section on the DataTransfer object.
+        false
+
+    dragEnter: (e) ->
+        #this / e.target is the current hover target.
+        e.currentTarget.classList.add('over')
+
+    dragLeave: (e) ->
+        e.currentTarget.classList.remove('over')  # this / e.target is previous target element.
+
+    drop: (e) ->
+        if (e.stopPropagation)
+            e.stopPropagation()
+
+        # Don't do anything if dropping the same column we're dragging.
+        if (window.currentTarget != window.srcDad)
+            window.srcDad.innerHTML = e.currentTarget.innerHTML
+            e.currentTarget.innerHTML = e.originalEvent.dataTransfer.getData('text/html')
+
+        e.currentTarget.style.opacity = '1'
+        window.srcDad.style.opacity = '1'
+
+        # convert dataset to JS Object
+        tabIds = ( $(tab)[0].dataset['id'] for tab in $('#tabs-list li a') )
+        tabIdsNumber = ( parseInt(id) for id in tabIds)
+        data = {}
+        for i in [0..tabIdsNumber.length - 1]
+            key = 'ids[' + i + ']'
+            value = tabIdsNumber[i]
+            data[ key] = value
+
+        jsRoutes.controllers.Tabs.savePosition(document.username).ajax
+            context: @
+            data: data
+            success: (result) ->
+                log 'res: ' + result
+            error: (err) ->
+                log 'ERROR'
+                log err
+
+        false
 
     render: ->
         log 'render tab'
@@ -173,6 +291,7 @@ class TabView extends Backbone.View
     
     display2: (id) ->
         $('#tabs-list li').removeClass('active')
+        $('#tabs-list li').attr('draggable','true')
         $("#tabs-list li a[data-id=#{id}]").parent().addClass('active')
         @._display(id)
     
