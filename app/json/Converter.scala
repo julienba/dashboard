@@ -2,11 +2,11 @@ package json
 
 import play.api.libs.json._
 import play.api.libs.json.Json._
-import play.api.libs.json.Generic._
 
 import models._
-import util.Time
 import rss.RSSURL
+import jba.util.Time
+
 
 /**
  * Convert models to json

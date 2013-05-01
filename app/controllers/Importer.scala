@@ -11,6 +11,8 @@ import scala.xml._
 
 import anorm.NotAssigned
 
+import play.api.libs.concurrent.Execution.Implicits._
+
 import models.{Tab, Module}
 import rss._
 

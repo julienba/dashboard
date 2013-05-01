@@ -1,10 +1,12 @@
 import akka.actor._
-import akka.util.duration._
 import akka.util.Timeout
 
+import scala.concurrent.duration._
+
 import play.api._
-import play.api.libs.concurrent._
+import play.api.libs.concurrent.Akka
 import play.api.Play.current
+import play.api.libs.concurrent.Execution.Implicits._
 
 import models.Module
 import crawler.Crawler
@@ -12,7 +14,7 @@ import crawler.Crawler
 object Global extends GlobalSettings {
   
   val DEFAULT_NB_FETCH_FEED 	= 10
-  val DEFAULT_CRAWLER_FREQUENCY = 2 //minutes
+  val DEFAULT_CRAWLER_FREQUENCY = 2
   
   override def onStart(app: Application) {
 

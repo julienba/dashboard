@@ -5,6 +5,7 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json._
+import play.api.libs.concurrent.Execution.Implicits._
 
 import rss.{RSSURL, HTMLFetcher, RSSFetcher}
 import crawler.Crawler

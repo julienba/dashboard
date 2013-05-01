@@ -1,13 +1,15 @@
 package rss
 
+import scala.concurrent.Future
+import scala.collection.JavaConverters._
+
 import play.api.libs.ws.WS
 import play.api.libs.concurrent._
 import play.api.Logger
+import play.api.libs.concurrent.Execution.Implicits._
 
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
-
-import scala.collection.JavaConverters._
 
 import java.net.URI
 
@@ -19,9 +21,9 @@ object HTMLFetcher {
    * <link rel="alternate" type="application/atom+xml" title="Run Tings Proper - Atom" href="http://runtingsproper.blogspot.com/feeds/posts/default" />
    * <link rel="alternate" type="application/rss+xml" title="Run Tings Proper - RSS" href="http://runtingsproper.blogspot.com/feeds/posts/default?alt=rss" />
    */
-  def findRSS(url: String): Promise[List[RSSURL]] = {
+  def findRSS(url: String): Future[List[RSSURL]] = {
     Logger.debug("Parse website: " + url)
-    WS.url(url).get.map{ html =>
+    WS.url(url).get.map { html =>
       
       val titles = Jsoup.parse(html.body).select("title").asScala
       val title: String = if(!titles.isEmpty) titles(0).html() else url

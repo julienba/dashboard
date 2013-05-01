@@ -84,7 +84,7 @@ object Feed {
           result  
         }
       }catch {
-        case e => {
+        case e: Exception => {
           Logger.error("an exception occurred", e)
           Nil
         }

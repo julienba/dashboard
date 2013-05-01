@@ -1,4 +1,4 @@
-package util
+package jba.util
 
 import java.util.Date
 

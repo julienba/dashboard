@@ -133,7 +133,12 @@ object Module extends AnormExtension {
   
   def delete(id: Long) {
     DB.withConnection { implicit connection =>
-      SQL("DELETE from module where id = {id}")
+      
+      SQL("DELETE FROM feed where moduleId = {id}")
+        .on('id -> id)
+        .executeUpdate
+      
+      SQL("DELETE FROM module where id = {id}")
       	.on('id -> id)
       	.executeUpdate
     }

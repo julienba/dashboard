@@ -1,19 +1,22 @@
 package crawler
 
+import scala.concurrent.Future
+
 import play.api.Play.current
 import play.api.Logger
-import play.api.libs.concurrent._
+import play.api.libs.concurrent.PurePromise
+import play.api.libs.concurrent.Execution.Implicits._
 
 import models.{Feed, Module, ModuleStatus}
 import rss._
 
 object Crawler {
   
-  def apply(module: Module): Promise[List[Feed]] = {
+  def apply(module: Module): Future[List[Feed]] = {
     fetch(module).map(Feed.create(module, _))
   }
   
-  private def fetch(module: Module): Promise[List[Link]] = {
+  private def fetch(module: Module): Future[List[Link]] = {
     
     Module.updateLastupdate(module.id.get)
     
