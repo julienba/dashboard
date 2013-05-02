@@ -80,7 +80,7 @@ case class AtomExtractor(moduleId: Long, url: String) extends LinksExtractor {
       val description = (item \ "content") text
       
       val links = (item \ "link" ).filter(attributeValue("rel" -> "alternate","type"  -> "text/html"))
-      val feedUrl = links.headOption.map(_.text).getOrElse("TODO")
+      val feedUrl = links.headOption.map( l => l \"@href" text).getOrElse("TODO")
 
       val dateAsString = (item \ "updated") text
       
